@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS `pages`(
 CREATE TABLE IF NOT EXISTS `page_content`(
 	`page_content_id` int AUTO_INCREMENT,
     `page_id` int NOT NULL,
-    `page_image_id` int,
+    `image_id` bigint,
 	`user_id` int,
 	`title` tinytext NOT NULL,
 	`content` text NOT NULL,
@@ -66,20 +66,19 @@ CREATE TABLE IF NOT EXISTS `page_content`(
 	UNIQUE KEY `page_content_id` (`page_content_id`),
 	KEY `fk_user`(user_id),
 	KEY `fk_page`(page_id),
-    KEY `fk_page_image`(page_image_id),
-	CONSTRAINT `fk_page_image` FOREIGN KEY (`page_image_id`) REFERENCES `page_image`(`page_image_id`),
+    KEY `fk_image`(image_id),
+	CONSTRAINT `fk_image` FOREIGN KEY (`image_id`) REFERENCES `images`(`image_id`),
     CONSTRAINT `fk_page` FOREIGN KEY (`page_id`) REFERENCES `pages`(`page_id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
-CREATE TABLE IF NOT EXISTS `page_image` (
-	`page_image_id` int AUTO_INCREMENT,
-    `page_id` int NOT NULL,
+CREATE TABLE IF NOT EXISTS `images` (
+	`image_id` bigint AUTO_INCREMENT,
+    `type_id` int,
     `user_id` int,
+    `type` varchar(32) NOT NULL,
     `file_format` varchar(16) NOT NULL,
-    PRIMARY KEY(`page_image_id`),
-	UNIQUE KEY `page_image_id` (`page_image_id`),
-    KEY `fk_user`(user_id),
-	KEY `fk_page`(page_id)
+    `hidden` tinyint(4) NOT NULL DEFAULT `0`,
+    `created_at` datetime NOT NULL
 ) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 
 SET @user_id = 1;
