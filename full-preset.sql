@@ -19,7 +19,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   UNIQUE KEY `nick` (`nick`),
   UNIQUE KEY `user_id` (`user_id`),
   UNIQUE KEY `email` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 INSERT INTO users VALUES 
 	(
@@ -37,7 +37,22 @@ CREATE TABLE IF NOT EXISTS `user_sessions`(
     `expires` int UNSIGNED NOT NULL ,
     `data` mediumtext DEFAULT null ,
     PRIMARY KEY (`session_id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
+
+CREATE TABLE IF NOT EXISTS `user_whitelist` (
+  `user_id` INT(11) NOT NULL COMMENT 'This is the user_id of the person that whitelisted the user, NOT THE USER!',
+  `email` VARCHAR(32) NOT NULL,
+  `datetime` DATETIME NOT NULL COMMENT 'The date at which the user was whitelisted.',
+  `registered` TINYINT NOT NULL DEFAULT 0 COMMENT 'Whether or not the user has registered.',
+  PRIMARY KEY (`email`),
+  UNIQUE INDEX `email_UNIQUE` (`email` ASC),
+  INDEX `fk_user_idx` (`user_id` ASC),
+  CONSTRAINT `fk_userx`
+    FOREIGN KEY (`user_id`)
+    REFERENCES `ringo`.`users` (`user_id`)
+    ON DELETE CASCADE
+    ON UPDATE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET = utf8 COLLATE = utf8_bin;
 
 -- DROP TABLE IF EXISTS `articles`;
 CREATE TABLE IF NOT EXISTS `pages`(
@@ -51,7 +66,7 @@ CREATE TABLE IF NOT EXISTS `pages`(
 	UNIQUE KEY `page_id` (`page_id`),
 	KEY `fk_user`(`user_id`),
     CONSTRAINT `fk_user` FOREIGN KEY (`user_id`) REFERENCES `users`(`user_id`) ON DELETE SET NULL ON UPDATE CASCADE
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 -- DROP TABLE IF EXISTS `article_updates`;
 CREATE TABLE IF NOT EXISTS `page_content`(
@@ -69,7 +84,7 @@ CREATE TABLE IF NOT EXISTS `page_content`(
     KEY `fk_image`(image_id),
 	CONSTRAINT `fk_image` FOREIGN KEY (`image_id`) REFERENCES `images`(`image_id`),
     CONSTRAINT `fk_page` FOREIGN KEY (`page_id`) REFERENCES `pages`(`page_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 CREATE TABLE IF NOT EXISTS `images` (
 	`image_id` bigint AUTO_INCREMENT,
@@ -79,7 +94,7 @@ CREATE TABLE IF NOT EXISTS `images` (
     `file_format` varchar(16) NOT NULL,
     `hidden` tinyint(4) NOT NULL DEFAULT `0`,
     `created_at` datetime NOT NULL
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8 COLLATE=utf8_bin;
 
 SET @user_id = 1;
 SET @title = "test";
