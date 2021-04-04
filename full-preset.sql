@@ -13,7 +13,7 @@ CREATE TABLE IF NOT EXISTS `users` (
   -- the language is in ISO 639-2/B cause i believe as languages will come iso 639-1 isnt a permanent solution and is already limited
   -- list i liked: https://www.loc.gov/standards/iso639-2/php/code_list.php
   `language` char(3) DEFAULT 'ger',
-  `mode` varchar(5) DEFAULT 'light',
+  `mode` varchar(5) DEFAULT 'dark',
   `flags` int DEFAULT '0',
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `nick` (`nick`),
